@@ -1,0 +1,13 @@
+{
+  "target": "y",
+  "excluded_features": [
+    "duration"
+  ],
+  "predictor_count": 15,
+  "rows": 45211,
+  "train_rows": 36168,
+  "test_rows": 9043,
+  "test_size": 0.2,
+  "random_state": 42,
+  "positive_class": "yes"
+}
