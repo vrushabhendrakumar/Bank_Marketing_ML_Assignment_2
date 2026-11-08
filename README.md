@@ -2,88 +2,91 @@
 
 **BITS Pilani WILP | M.Tech (DSE) | Machine Learning | Assignment 2**
 
+**Student:** Vrushabhendra Kumar K N  
+**BITS ID:** 202NS04021
+
 ## a. Problem statement
 
-Predict whether a client of a Portuguese banking institution subscribes to a term deposit after direct-marketing activity. This is a binary classification problem. The target is `y` (`yes` / `no`).
+The objective is to predict whether a client of a Portuguese banking institution subscribes to a term deposit after direct-marketing activity. This is a binary classification task with `y` as the target (`yes` or `no`).
 
-The work implements Logistic Regression, Decision Tree, K-Nearest Neighbors, Gaussian Naive Bayes and Support Vector Machine. All models use a common stratified 80:20 train/test split and consistent preprocessing. Performance is evaluated using Accuracy, ROC-AUC, Precision, Recall, F1 and Matthews Correlation Coefficient (MCC).
+Five classification algorithms were trained and evaluated: Logistic Regression, Decision Tree, k-Nearest Neighbors (kNN), Gaussian Naive Bayes and Support Vector Machine (LinearSVC). Each model was evaluated on the same stratified 20% test split using Accuracy, ROC-AUC, Precision, Recall, F1-score and Matthews Correlation Coefficient (MCC).
 
-**Leakage control:** `duration` is excluded. UCI explains that call duration is only known after the call ends and should be discarded for a realistic predictive model.
+**Leakage prevention:** The `duration` feature was excluded. Call duration is only known after a call has ended, so including it would not be appropriate for a model intended to support decisions before or during a call.
 
 ## b. Dataset description
 
-- **Source:** UCI Machine Learning Repository, Bank Marketing (dataset ID 222).
+- **Dataset:** Bank Marketing (`bank-full.csv`, legacy version).
+- **Source:** UCI Machine Learning Repository, dataset ID 222.
 - **Citation:** Moro, S., Rita, P., & Cortez, P. (2014). *Bank Marketing* [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5K306
+- **Official dataset page:** https://archive.ics.uci.edu/dataset/222/bank+marketing
 - **License:** Creative Commons Attribution 4.0 (CC BY 4.0).
-- **Selected version:** `bank-full.csv` (legacy version).
-- **Dataset size:** 45,211 instances, 16 original input features and one binary target (`y`).
-- **Feature types:** categorical and integer/numeric.
-- **Target:** whether the client subscribed to a term deposit (`yes` or `no`).
-- **Predictors used in this project:** 15 (16 original predictors minus `duration` to avoid target leakage).
-- **Class imbalance:** the `yes` class is the minority class; therefore accuracy is interpreted together with AUC, precision, recall, F1 and MCC.
-
-Official source: https://archive.ics.uci.edu/dataset/222/bank+marketing
+- **Number of records:** 45,211.
+- **Original input features:** 16.
+- **Predictors used:** 15, after excluding `duration`.
+- **Target:** `y`, indicating whether the client subscribed to a term deposit (`yes` or `no`).
+- **Data types:** A mixture of numeric and categorical features.
+- **Class distribution in the held-out test set:** 7,985 `no` records and 1,058 `yes` records. The target is imbalanced, with `yes` as the minority class.
 
 ## c. GitHub Repository Link
 
-**Add your public GitHub repository URL here after creating and pushing the repository:**
+**Repository:** https://github.com/vrushabhendrakumar/Bank_Marketing_ML_Assignment_2
 
-`[PASTE YOUR GITHUB REPOSITORY URL]`
+The repository contains the project source, training code, notebook, application, dependencies and experiment result files. The repository link should be opened to inspect the current committed files.
+
+## Live Streamlit application
+
+**Application:** https://bankmarketingmlassignment2-cda2zs3rb6toynwhz5f755.streamlit.app/
+
+The application is intended to provide a CSV upload option, a model-selection dropdown, evaluation metrics and a confusion matrix/classification report for labelled test data. The public URL should be tested in a normal browser or private window before submission to confirm that the interactive app loads.
 
 ## d. Models used
 
-1. Logistic Regression — linear probabilistic classifier; class weighting is enabled.
-2. Decision Tree Classifier — non-linear tree model with controlled depth and minimum leaf size.
-3. K-Nearest Neighbors — distance-weighted 7-neighbour classifier.
-4. Gaussian Naive Bayes — probabilistic classifier using a Gaussian likelihood assumption.
-5. Support Vector Machine — LinearSVC with class weighting. Its decision scores are used to calculate ROC-AUC.
+1. **Logistic Regression:** A linear classification model. Class weighting was enabled.
+2. **Decision Tree:** A tree-based classifier that can represent non-linear decision rules.
+3. **k-Nearest Neighbors:** A distance-based classifier using 7 neighbours with distance weighting.
+4. **Gaussian Naive Bayes:** A probabilistic classifier based on Gaussian likelihoods and a conditional-independence assumption.
+5. **Support Vector Machine:** LinearSVC with class weighting. Decision scores were used to calculate ROC-AUC.
 
-### Preprocessing and experiment protocol
+### Experiment setup and preprocessing
 
-- Split: 80% training / 20% testing, stratified by target.
-- Random seed: 42.
-- Numeric columns: median imputation and standard scaling.
-- Categorical columns: most-frequent imputation and one-hot encoding with unknown-category handling.
-- Preprocessing is fitted only on the training split using scikit-learn Pipelines.
-- `duration` is excluded from both training and test inputs.
-- Class weighting is used for Logistic Regression, Decision Tree and SVM to reduce the impact of class imbalance.
-- ROC-AUC uses predicted probabilities where available and decision scores for LinearSVC.
+- Train/test split: 80% / 20%, stratified by target.
+- Random state: 42.
+- Dataset size: 45,211 rows; held-out test size: 9,043 rows.
+- Numeric features: median imputation followed by standard scaling.
+- Categorical features: most-frequent imputation followed by one-hot encoding.
+- Preprocessing was fitted on the training data as part of scikit-learn pipelines.
+- `duration` was excluded to avoid leakage.
+- Class weighting was applied to Logistic Regression, Decision Tree and LinearSVC.
+- ROC-AUC was calculated from predicted probabilities where available and decision scores for LinearSVC.
 
 ### Model comparison table
 
-Run `python model/train_models.py` to generate the real values in `results/model_comparison.csv`. Copy those measured values into this table before final submission. Do not report placeholder or assumed metrics.
+All values below are from the supplied experiment output (`results/model_comparison.csv`) and are rounded to four decimal places.
 
 | ML Model Name | Accuracy | AUC | Precision | Recall | F1 | MCC |
 |---|---:|---:|---:|---:|---:|---:|
-| Logistic Regression | Pending run | Pending run | Pending run | Pending run | Pending run | Pending run |
-| Decision Tree | Pending run | Pending run | Pending run | Pending run | Pending run | Pending run |
-| KNN | Pending run | Pending run | Pending run | Pending run | Pending run | Pending run |
-| Naive Bayes | Pending run | Pending run | Pending run | Pending run | Pending run | Pending run |
-| Support Vector Machine | Pending run | Pending run | Pending run | Pending run | Pending run | Pending run |
-
+| Logistic Regression | 0.7622 | 0.7518 | 0.2681 | 0.5964 | 0.3699 | 0.2788 |\n| Decision Tree | 0.8330 | 0.7384 | 0.3507 | 0.5019 | 0.4129 | 0.3261 |\n| K-Nearest Neighbors (kNN) | 0.8888 | 0.7104 | 0.5730 | 0.1928 | 0.2885 | 0.2872 |\n| Gaussian Naive Bayes | 0.8466 | 0.7340 | 0.3689 | 0.4376 | 0.4003 | 0.3146 |\n| Support Vector Machine (LinearSVC) | 0.7687 | 0.7513 | 0.2732 | 0.5888 | 0.3733 | 0.2823 |\n
 ### Observations on model performance
-
-Complete this section from the generated comparison table and confusion matrices after running the experiment. Use the same held-out test set for every model.
 
 | ML Model Name | Observation about model performance |
 |---|---|
-| Logistic Regression | Add evidence-based observation about precision/recall trade-off, AUC and MCC. |
-| Decision Tree | Comment on non-linear patterns, generalization and minority-class errors. |
-| KNN | Comment on distance-based performance after scaling and minority-class detection. |
-| Naive Bayes | Comment on its probabilistic baseline and feature-independence assumption. |
-| Support Vector Machine | Comment on margin-based separation, AUC and class-weighted predictions. |
-| **Overall winner for this dataset** | Select only after comparing the measured metrics. State which metric(s) informed the choice. |
+| Logistic Regression | It achieved the highest recall (0.5964) and the highest ROC-AUC (0.7518). It identified more subscribers than most other models, but its precision was relatively low (0.2681), so a substantial number of predicted subscribers were false positives. |\n| Decision Tree | It produced the highest F1-score (0.4129) and MCC (0.3261), giving the strongest balance of precision and recall among the five models. Its accuracy was 0.8330 and its recall was 0.5019. |\n| kNN | It recorded the highest accuracy (0.8888) and precision (0.5730), but recall was only 0.1928. It missed many actual subscribers, so its high accuracy does not make it the best model for detecting the minority class. |\n| Naive Bayes | Gaussian Naive Bayes gave a reasonable baseline, with F1-score 0.4003 and MCC 0.3146. Its performance is useful for comparison, although the conditional-independence assumption may not fully describe relationships among the bank-marketing features. |\n| Support Vector Machine | The LinearSVC model achieved ROC-AUC 0.7513 and recall 0.5888, close to Logistic Regression. Precision was 0.2732 and F1-score was 0.3733, indicating a similar precision-recall trade-off. |\n| **Overall winner for this dataset** | **Decision Tree**, when selecting on the combined balance of F1-score and MCC. It achieved the highest F1-score (0.4129) and MCC (0.3261). Logistic Regression had the highest recall and AUC, so it may be preferable if identifying as many potential subscribers as possible is the main priority. |
 
-**Winner-selection guidance:** With an imbalanced target, do not select a model using accuracy alone. Consider ROC-AUC, F1 and MCC together, and explain the precision/recall trade-off relevant to the use case.
+### Interpretation
+
+The test set contains 7,985 non-subscribers and 1,058 subscribers. A classifier that always predicted `no` would achieve approximately 0.8830 accuracy. The kNN accuracy of 0.8888 is only slightly higher than that reference, while its recall is 0.1928. This shows why accuracy alone is not sufficient for this imbalanced classification task.
+
+The Decision Tree is selected as the overall winner based on F1-score and MCC, which provide a more balanced view of positive-class detection and overall prediction quality. The best model may differ if the practical objective places greater cost on false negatives or false positives.
 
 ## Streamlit application features
 
-- CSV upload for a labelled test dataset.
-- Model-selection dropdown.
-- Accuracy, ROC-AUC, Precision, Recall, F1 and MCC display.
-- Confusion matrix.
-- Classification report.
-- Preview of actual versus predicted labels.
+The submitted application is expected to provide:
+
+- CSV upload for labelled test data.
+- A dropdown to select one of the five trained models.
+- Accuracy, ROC-AUC, Precision, Recall, F1-score and MCC.
+- A confusion matrix and/or classification report.
+- A view of actual and predicted target labels.
 
 ## Project structure
 
@@ -92,21 +95,18 @@ Bank_Marketing_ML_Assignment_2/
 ├── app.py
 ├── requirements.txt
 ├── README.md
-├── test_data.csv                 # Generated with held-out test rows after training
+├── test_data.csv
 ├── data/
-│   ├── download_dataset.py
-│   └── bank-full.csv              # Downloaded dataset; do not commit if not permitted
+│   └── download_dataset.py
 ├── model/
 │   ├── train_models.py
-│   └── saved_models/              # Generated .joblib model pipelines
+│   └── saved_models/
 ├── results/
 │   ├── model_comparison.csv
 │   ├── evaluation_details.json
 │   └── run_metadata.json
-├── notebooks/
-│   └── Bank_Marketing_Classification.ipynb
-└── screenshots/
-    └── bits_virtual_lab.png       # Add your own BITS Virtual Lab screenshot
+└── notebooks/
+    └── Bank_Marketing_Classification.ipynb
 ```
 
 ## Installation and execution
@@ -115,9 +115,11 @@ Python 3.10 or 3.11 is recommended.
 
 ```bash
 python -m venv .venv
-# Windows:
-.venv\Scripts\activate
-# macOS/Linux:
+
+# Windows
+.venv\\Scripts\\activate
+
+# macOS/Linux
 source .venv/bin/activate
 
 python -m pip install --upgrade pip
@@ -127,33 +129,17 @@ python model/train_models.py
 streamlit run app.py
 ```
 
-After training, the script creates:
-- `model/saved_models/*.joblib`
-- `test_data.csv` (the stratified held-out test rows, including target `y`)
-- `results/model_comparison.csv`
-- `results/evaluation_details.json`
-- `results/run_metadata.json`
+After training, the script generates the saved model pipelines, held-out `test_data.csv` and result files under `results/`. The labelled test CSV can then be uploaded in the Streamlit application.
 
-Open the local Streamlit URL printed in the terminal. Upload `test_data.csv` or another labelled CSV to evaluate the selected model.
+## Streamlit Community Cloud deployment
 
-## GitHub and Streamlit Community Cloud deployment
+The app is configured for deployment from the GitHub repository using Streamlit Community Cloud. The entry point is `app.py`, and the dependencies are listed in `requirements.txt`.
 
-1. Create a new public GitHub repository for this project.
-2. Add the source files, `requirements.txt`, completed README, generated model files and labelled `test_data.csv`.
-3. Do not commit virtual environments, cache folders or personal credentials.
-4. Commit and push the project to the `main` branch.
-5. Open https://share.streamlit.io/ and sign in with GitHub.
-6. Select **Create app**, choose the repository, branch `main`, and entrypoint `app.py`.
-7. Deploy and wait for the app health check to complete.
-8. Open the public `*.streamlit.app` URL in a private/incognito window to verify it.
-9. Add the actual GitHub URL and deployed Streamlit URL to the final PDF.
+Deployment URL: https://bankmarketingmlassignment2-cda2zs3rb6toynwhz5f755.streamlit.app/
 
-Community Cloud dependency files should be in the repository root or beside the app entrypoint. See https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/app-dependencies
+## Screenshots to insert before final submission
 
-## BITS Virtual Lab evidence
-
-Run the notebook or Python scripts in BITS Virtual Lab. Capture one genuine screenshot showing the project execution (for example, the terminal/notebook with successful model evaluation). Save it as `screenshots/bits_virtual_lab.png` and insert it into the final PDF. Do not substitute a local-machine screenshot for the required BITS Virtual Lab proof.
-
-## Academic integrity and reproducibility
-
-This starter implementation is prepared for learning and must be reviewed, executed and understood by the student. Run the experiments yourself, inspect the results, write observations in your own words, maintain your own Git commit history, and use your own GitHub and Streamlit accounts. Do not claim deployment or BITS Lab execution until you have actually completed those steps.
+Add genuine screenshots in the spaces provided in the accompanying report:
+1. Streamlit application home page / CSV upload interface.
+2. Streamlit model selection and displayed evaluation metrics.
+3. Streamlit confusion matrix or classification report.
